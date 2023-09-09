@@ -15,6 +15,15 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Creates new form MainWindow
      */
+    
+    /*
+        expr 	   -> term rest_expr
+        rest_expr  -> + term rest_expr
+        rest_expr  -> - term rest_expr
+        rest_expr  -> Lambda
+        term 	   -> 0...9
+    */
+    
     public MainWindow() {
         initComponents();
     }
