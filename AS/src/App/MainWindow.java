@@ -6,6 +6,7 @@ package App;
 
 import java.util.ArrayList;
 import Exceptions.TermExcept;
+import Exceptions.reException;
 import javax.swing.JOptionPane;
 
 /**
@@ -28,8 +29,11 @@ public class MainWindow extends javax.swing.JFrame {
     
     public MainWindow() {
         initComponents();
+        this.except = false;
     }
     
+    // Vars
+    boolean except;
         
     //Function
     private void term(char c) throws TermExcept{
@@ -43,34 +47,41 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }
 
-    private void expr(ArrayList<Character> Cadena) throws TermExcept{
+    private void expr(ArrayList<Character> Cadena) throws TermExcept, reException{
         try{
             term(Cadena.get(0));
-        }
-        catch(TermExcept e){
-            // Term exception
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
-        finally{
+            
             Cadena.remove(0);
             restoExpr(Cadena);
         }
-
+        catch(TermExcept | reException e){
+            // Term exception
+            this.except = true;
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }
     
-    private void restoExpr(ArrayList<Character> Cadena) throws TermExcept{
+    private void restoExpr(ArrayList<Character> Cadena) throws TermExcept, reException{
+        if(Cadena.isEmpty()){
+            // Finished
+            return;
+        }
         Character preanalisis = Cadena.get(0);
         Cadena.remove(0);
         switch(preanalisis){
             case '+' -> {
                 term(Cadena.get(0));
+                Cadena.remove(0);
                 restoExpr(Cadena);
             }
             case '-' -> {
                 term(Cadena.get(0));
+                Cadena.remove(0);
                 restoExpr(Cadena);
             }
-            default -> { 
+            default -> {
+                // exception
+                throw new reException("Error in the string!");
             }
         }
     }
@@ -138,11 +149,18 @@ public class MainWindow extends javax.swing.JFrame {
             Cadena.add(data.charAt(i));
         }
         
-        Cadena.add('x');
-        
-        // Process
-        
-        JOptionPane.showMessageDialog(this, "The string: ".concat(this.inputField.getText()).concat(" is valid!"));
+        try {
+            // Process
+            this.expr(Cadena);
+            if(!this.except){
+                JOptionPane.showMessageDialog(this, "The string: ".concat(this.inputField.getText()).concat(" is valid!"));
+            }
+        } catch (TermExcept | reException ex) {
+            this.except = true;
+        }
+        finally{
+            this.except =false;
+        }
     }//GEN-LAST:event_AnalyzeBTNActionPerformed
 
     /**
