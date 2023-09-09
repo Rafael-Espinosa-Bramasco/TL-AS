@@ -30,6 +30,8 @@ public class MainWindow extends javax.swing.JFrame {
         inputField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Analizador Sintactico");
+        setResizable(false);
 
         inputLabel.setText("Cadena de entrada:");
 
@@ -61,6 +63,7 @@ public class MainWindow extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void inputFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputFieldActionPerformed
