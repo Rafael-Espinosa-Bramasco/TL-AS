@@ -4,6 +4,8 @@
  */
 package App;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author rafael
@@ -20,7 +22,9 @@ public class MainWindow extends javax.swing.JFrame {
         
     //Function
     private void expr(){}
-    private void term(){}
+    private void term(){
+        
+    }
     private void restoExpr(){}
     /**
      * This method is called from within the constructor to initialize the form.
@@ -95,6 +99,12 @@ public class MainWindow extends javax.swing.JFrame {
     private void AnalyzeBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnalyzeBTNActionPerformed
         // TODO add your handling code here:
         String data = this.inputField.getText();
+        ArrayList<char> Cadena;
+        
+        for (int i=0 ; i< data.length; i++){
+            Cadena.add(data[i]);
+        }
+        
     }//GEN-LAST:event_AnalyzeBTNActionPerformed
 
     /**
