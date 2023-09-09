@@ -9,14 +9,19 @@ package App;
  * @author rafael
  */
 public class MainWindow extends javax.swing.JFrame {
-
+    
     /**
      * Creates new form MainWindow
      */
     public MainWindow() {
         initComponents();
     }
-
+    
+        
+    //Function
+    private void expr(){}
+    private void term(){}
+    private void restoExpr(){}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,6 +33,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         inputLabel = new javax.swing.JLabel();
         inputField = new javax.swing.JTextField();
+        AnalyzeBTN = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Analizador Sintactico");
@@ -41,6 +47,13 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        AnalyzeBTN.setText("Analizar");
+        AnalyzeBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AnalyzeBTNActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -49,7 +62,9 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addComponent(inputLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(inputField, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(inputField, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(AnalyzeBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(59, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -59,7 +74,9 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(inputLabel)
                     .addComponent(inputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(145, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(AnalyzeBTN)
+                .addContainerGap(104, Short.MAX_VALUE))
         );
 
         pack();
@@ -69,6 +86,11 @@ public class MainWindow extends javax.swing.JFrame {
     private void inputFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_inputFieldActionPerformed
+
+    private void AnalyzeBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnalyzeBTNActionPerformed
+        // TODO add your handling code here:
+        String data = this.inputField.getText();
+    }//GEN-LAST:event_AnalyzeBTNActionPerformed
 
     /**
      * @param args the command line arguments
@@ -106,7 +128,12 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AnalyzeBTN;
     private javax.swing.JTextField inputField;
     private javax.swing.JLabel inputLabel;
     // End of variables declaration//GEN-END:variables
 }
+
+
+
+
