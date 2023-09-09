@@ -7,6 +7,7 @@ package App;
 import java.util.ArrayList;
 import Exceptions.TermExcept;
 import Exceptions.reException;
+import java.util.function.Predicate;
 import javax.swing.JOptionPane;
 
 /**
@@ -148,6 +149,8 @@ public class MainWindow extends javax.swing.JFrame {
         for (int i=0 ; i< data.length(); i++){
             Cadena.add(data.charAt(i));
         }
+        
+        Cadena.removeIf(c -> (c == '\s'));
         
         try {
             // Process
