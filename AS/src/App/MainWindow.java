@@ -99,12 +99,13 @@ public class MainWindow extends javax.swing.JFrame {
     private void AnalyzeBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnalyzeBTNActionPerformed
         // TODO add your handling code here:
         String data = this.inputField.getText();
-        ArrayList<char> Cadena;
+        ArrayList<Character> Cadena = new ArrayList<>();
         
-        for (int i=0 ; i< data.length; i++){
-            Cadena.add(data[i]);
+        for (int i=0 ; i< data.length(); i++){
+            Cadena.add(data.charAt(i));
         }
         
+        Cadena.add('x');
     }//GEN-LAST:event_AnalyzeBTNActionPerformed
 
     /**
