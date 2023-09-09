@@ -5,6 +5,7 @@
 package App;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -30,11 +31,37 @@ public class MainWindow extends javax.swing.JFrame {
     
         
     //Function
-    private void expr(){}
+    private void expr(ArrayList<Character> Cadena){
+        try{
+            term(Cadena.get(0));
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+        finally{
+            Cadena.remove(0);
+            restoExpr(Cadena);
+        }
+
+    }
     private void term(){
         
     }
-    private void restoExpr(){}
+    private void restoExpr(ArrayList<Character> Cadena){
+        Character preanalisis = Cadena.get(0);
+        Cadena.remove(0);
+        switch(preanalisis){
+            case '+':
+                term(Cadena.get(0));
+                restoExpr(Cadena);
+                break;
+            case '-':
+                term(Cadena.get(0));
+                restoExpr(Cadena);
+                break;
+            default: 
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
