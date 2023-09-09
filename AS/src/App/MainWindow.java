@@ -41,9 +41,9 @@ public class MainWindow extends javax.swing.JFrame {
 
         inputLabel.setText("Cadena de entrada:");
 
-        inputField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputFieldActionPerformed(evt);
+        inputField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                inputFieldKeyTyped(evt);
             }
         });
 
@@ -83,9 +83,14 @@ public class MainWindow extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void inputFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputFieldActionPerformed
+    private void inputFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputFieldKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_inputFieldActionPerformed
+        switch(evt.getKeyChar()){
+            case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-' -> {
+            }
+            default -> evt.consume();
+        }
+    }//GEN-LAST:event_inputFieldKeyTyped
 
     private void AnalyzeBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnalyzeBTNActionPerformed
         // TODO add your handling code here:
