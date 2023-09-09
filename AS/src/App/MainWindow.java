@@ -5,6 +5,7 @@
 package App;
 
 import java.util.ArrayList;
+import Exceptions.TermExcept;
 
 /**
  *
@@ -31,8 +32,15 @@ public class MainWindow extends javax.swing.JFrame {
         
     //Function
     private void expr(){}
-    private void term(){
-        
+    private void term(char c) throws TermExcept{
+        switch(c){
+            case '0','1','2','3','4','5','6','7','8','9' -> {
+                // Term is valid
+            }
+            default -> {
+                throw new TermExcept("Term is not valid!");
+            }
+        }
     }
     private void restoExpr(){}
     /**
@@ -53,12 +61,6 @@ public class MainWindow extends javax.swing.JFrame {
         setResizable(false);
 
         inputLabel.setText("Cadena de entrada:");
-
-        inputField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                inputFieldKeyTyped(evt);
-            }
-        });
 
         AnalyzeBTN.setText("Analizar");
         AnalyzeBTN.addActionListener(new java.awt.event.ActionListener() {
@@ -95,15 +97,6 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void inputFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputFieldKeyTyped
-        // TODO add your handling code here:
-        switch(evt.getKeyChar()){
-            case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-' -> {
-            }
-            default -> evt.consume();
-        }
-    }//GEN-LAST:event_inputFieldKeyTyped
 
     private void AnalyzeBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnalyzeBTNActionPerformed
         // TODO add your handling code here:
