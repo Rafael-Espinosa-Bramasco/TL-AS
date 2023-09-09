@@ -6,6 +6,7 @@ package App;
 
 import java.util.ArrayList;
 import Exceptions.TermExcept;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -31,7 +32,6 @@ public class MainWindow extends javax.swing.JFrame {
     
         
     //Function
-    private void expr(){}
     private void term(char c) throws TermExcept{
         switch(c){
             case '0','1','2','3','4','5','6','7','8','9' -> {
@@ -42,7 +42,38 @@ public class MainWindow extends javax.swing.JFrame {
             }
         }
     }
-    private void restoExpr(){}
+
+    private void expr(ArrayList<Character> Cadena) throws TermExcept{
+        try{
+            term(Cadena.get(0));
+        }
+        catch(TermExcept e){
+            // Term exception
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+        finally{
+            Cadena.remove(0);
+            restoExpr(Cadena);
+        }
+
+    }
+    
+    private void restoExpr(ArrayList<Character> Cadena) throws TermExcept{
+        Character preanalisis = Cadena.get(0);
+        Cadena.remove(0);
+        switch(preanalisis){
+            case '+' -> {
+                term(Cadena.get(0));
+                restoExpr(Cadena);
+            }
+            case '-' -> {
+                term(Cadena.get(0));
+                restoExpr(Cadena);
+            }
+            default -> { 
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -108,6 +139,10 @@ public class MainWindow extends javax.swing.JFrame {
         }
         
         Cadena.add('x');
+        
+        // Process
+        
+        JOptionPane.showMessageDialog(this, "The string: ".concat(this.inputField.getText()).concat(" is valid!"));
     }//GEN-LAST:event_AnalyzeBTNActionPerformed
 
     /**
@@ -138,10 +173,8 @@ public class MainWindow extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainWindow().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new MainWindow().setVisible(true);
         });
     }
 
