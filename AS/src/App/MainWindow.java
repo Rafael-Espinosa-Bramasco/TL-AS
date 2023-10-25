@@ -88,6 +88,7 @@ public class MainWindow extends javax.swing.JFrame {
            }
            else{
                JOptionPane.showMessageDialog(this, "Error 0: \nNot acceptable character '" + act + "'.");
+               this.Error = true;
                return tokens;
            }
         }
@@ -112,11 +113,171 @@ public class MainWindow extends javax.swing.JFrame {
     private boolean isClosePar(char c){
         return c == ')';
     }
+    private boolean isOpenPar(String s){
+        return s == "(";
+    }
+    private boolean isClosePar(String s){
+        return s == ")";
+    }
     private boolean isOP(char c){
         switch(c){
             case '+','-','*','/' -> {return true;}
             default -> {return false;}
         }
+    }
+    private boolean isOP(String s){
+        switch(s){
+            case "+","-","*","/" -> {return true;}
+            default -> {return false;}
+        }
+    }
+    
+    private ArrayList getSymbolTable(ArrayList<String> tokens){
+        ArrayList<String> symbolTable = new ArrayList<>();
+        
+        for(int i = 0 ; i < tokens.size() ; i++){
+            if(symbolTable.indexOf(tokens.get(i)) == -1 && !notAccept(tokens.get(i))){
+                symbolTable.add(tokens.get(i));
+            }
+        }
+        
+        return symbolTable;
+    }
+    
+    private boolean notAccept(String s){
+        switch(s){
+            case "+","-","*","/","(",")" -> {return true;}
+            default -> {return false;}
+        }
+    }
+    
+    private boolean sintacticA(ArrayList<String> tokens){
+        return this.E(tokens);
+    }
+    
+    private boolean E(ArrayList<String> tokens){
+        boolean T = false;
+        boolean RE = false;
+        
+        if(!tokens.isEmpty() && (isNumber(tokens.get(0)) || isIdentifier(tokens.get(0)))){
+            T = this.T(tokens.get(0));
+            tokens.remove(0);
+            RE = this.RE(tokens);
+        }else if(isOpenPar(tokens.get(0))){
+            ArrayList<String> termArray = new ArrayList<>();
+                
+            int numPar = 1;
+            tokens.remove(0);
+            termArray.add("(");
+            while(numPar > 0 && !tokens.isEmpty()){
+                if(isOpenPar(tokens.get(0))){
+                    numPar++;
+                }else if(isClosePar(tokens.get(0))){
+                    numPar--;
+                }
+                
+                termArray.add(tokens.get(0));
+                tokens.remove(0);
+            }
+
+            if(numPar >= 1){
+                return false;
+            }else{
+                T = this.T(termArray);
+                RE = this.RE(tokens);
+                return T && RE;
+            }
+        }
+        
+        return RE && T;
+    }
+    
+    private boolean RE(ArrayList<String> tokens){
+        boolean T = false;
+        boolean RE = false;
+        
+        if(tokens.isEmpty()){
+            return true;
+        }
+        else if(tokens.size() >= 2 && isOP(tokens.get(0))){
+            tokens.remove(0);
+            
+            if(!tokens.isEmpty() && (isNumber(tokens.get(0)) || isIdentifier(tokens.get(0)))){
+                T = this.T(tokens.get(0));
+                tokens.remove(0);
+                RE = this.RE(tokens);
+            }else if(isOpenPar(tokens.get(0))){
+                ArrayList<String> termArray = new ArrayList<>();
+                
+                int numPar = 1;
+                tokens.remove(0);
+                termArray.add("(");
+                while(numPar > 0 && !tokens.isEmpty()){
+                    if(isOpenPar(tokens.get(0))){
+                        numPar++;
+                    }else if(isClosePar(tokens.get(0))){
+                        numPar--;
+                    }
+
+                    termArray.add(tokens.get(0));
+                    tokens.remove(0);
+                }
+                
+                if(numPar >= 1){
+                    return false;
+                }else{
+                    T = this.T(termArray);
+                    RE = this.RE(tokens);
+                    return T && RE;
+                }
+            }
+            
+            return T && RE;
+        }else{
+            return false;
+        }
+    }
+    
+    private boolean T(ArrayList<String> tokens){
+        if(tokens.size() >= 3){
+            tokens.remove(0);
+            tokens.remove(tokens.size() - 1);
+            
+            return this.E(tokens);
+        }
+        
+        return false;
+    }
+    private boolean T(String token){
+        if(isNumber(token)){
+            return this.N(token);
+        }else if(isIdentifier(token)){
+            return this.ID(token);
+        }
+        return false;
+    }
+    
+    private boolean N(String number){
+        return isNumber(number);
+    }
+    
+    private boolean ID(String identifier){
+        return isIdentifier(identifier);
+    }
+    
+    private boolean isNumber(String num){
+        for(int i = 0 ; i < num.length() ; i++){
+            if(!isNum(num.charAt(i))){
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    private boolean isIdentifier(String id){
+        
+        return isLetter(id.charAt(0));
     }
     
     /**
@@ -209,6 +370,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void AnalyzeBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnalyzeBTNActionPerformed
         // TODO add your handling code here:
+        System.out.println("================================================");
         this.last_button.setEnabled(true);
         String input = this.inputField.getText();
         this.lastInput = input;
@@ -224,8 +386,13 @@ public class MainWindow extends javax.swing.JFrame {
             this.Error = false;
             return;
         }
+        ArrayList<String> symbolTable = this.getSymbolTable(allTokens);
+        
+        boolean AS = this.sintacticA((ArrayList<String>) allTokens.clone());
         
         System.out.println(allTokens);
+        System.out.println(symbolTable);
+        System.out.println("AS Result: ".concat(String.valueOf(AS)));
     }//GEN-LAST:event_AnalyzeBTNActionPerformed
 
     private void last_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_last_buttonActionPerformed
