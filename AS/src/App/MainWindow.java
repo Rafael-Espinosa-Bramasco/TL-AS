@@ -19,24 +19,30 @@ public class MainWindow extends javax.swing.JFrame {
      */
     
     /*
-        expr -> term res_expr
-        res_expr -> + term res_expr
-        res_expr -> - term res_expr
-        res_expr -> * term res_expr
-        res_expr -> / term res_expr
-        res_expr -> <LAMBDA>
-        sign -> + | - | * | /
-        term -> (expr)
-        term -> 0...9
+        <E> :: <T><RE>
+        <RE> :: + <T><RE>
+        <RE> :: - <T><RE>
+        <RE> :: * <T><RE>
+        <RE> :: / <T><RE>
+        <RE> :: λ
+        <T> :: <N> | <ID> | (E)
+        <N> :: {isNum}
+        <ID> :: {isID}
     */
      
     public MainWindow() {
         initComponents();
         this.lastInput = "";
         this.Error = false;
+        
+        this.mySymbolsTable = null;
+        this.myDAGTable = null;
     }
     String lastInput;
     boolean Error;
+    
+    SymbolsTable mySymbolsTable;
+    DAG_TABLE myDAGTable;
     
     /////////////// get token list functions ///////////////
     private ArrayList getTokens(ArrayList<Character> X){
@@ -136,7 +142,7 @@ public class MainWindow extends javax.swing.JFrame {
         ArrayList<String> symbolTable = new ArrayList<>();
         
         for(int i = 0 ; i < tokens.size() ; i++){
-            if(symbolTable.indexOf(tokens.get(i)) == -1 && !notAccept(tokens.get(i))){
+            if(symbolTable.indexOf(tokens.get(i)) == -1 && !notAccept(tokens.get(i)) && !isNumber(tokens.get(i))){
                 symbolTable.add(tokens.get(i));
             }
         }
@@ -276,8 +282,20 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     private boolean isIdentifier(String id){
-        
         return isLetter(id.charAt(0));
+    }
+    
+    private void createSymbolsTable(ArrayList<String> symbols){
+        if(this.mySymbolsTable == null){
+            this.mySymbolsTable = new SymbolsTable();
+            
+            
+            for(int i = 0 ; i < symbols.size() ; i++){
+                this.mySymbolsTable.addSymbol(symbols.get(i), (isIdentifier(symbols.get(i)) ? "Identifier" : "Number"));
+            }
+            
+            this.mySymbolsTable.setVisible(true);
+        }
     }
     
     /**
@@ -370,6 +388,16 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void AnalyzeBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnalyzeBTNActionPerformed
         // TODO add your handling code here:
+        
+        if(this.mySymbolsTable != null && this.mySymbolsTable.isEnabled()){
+            this.mySymbolsTable.dispose();
+            this.mySymbolsTable = null;
+        }
+        if(this.myDAGTable != null && this.myDAGTable.isEnabled()){
+            this.myDAGTable.dispose();
+            this.myDAGTable = null;
+        }
+        
         System.out.println("================================================");
         this.last_button.setEnabled(true);
         String input = this.inputField.getText();
@@ -390,9 +418,19 @@ public class MainWindow extends javax.swing.JFrame {
         
         boolean AS = this.sintacticA((ArrayList<String>) allTokens.clone());
         
+        if(!AS){
+            return;
+        }
+        
+        this.createSymbolsTable(symbolTable);
+        
+        // Create DAG table
+        
         System.out.println(allTokens);
         System.out.println(symbolTable);
         System.out.println("AS Result: ".concat(String.valueOf(AS)));
+        
+        this.inputField.setText("");
     }//GEN-LAST:event_AnalyzeBTNActionPerformed
 
     private void last_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_last_buttonActionPerformed
