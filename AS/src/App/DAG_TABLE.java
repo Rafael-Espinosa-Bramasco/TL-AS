@@ -4,6 +4,8 @@
  */
 package App;
 
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author rafael
@@ -15,8 +17,15 @@ public class DAG_TABLE extends javax.swing.JFrame {
      */
     public DAG_TABLE() {
         initComponents();
+        this.table1 = (DefaultTableModel) this.table.getModel();
     }
-
+    
+    DefaultTableModel table1;
+    
+    public void addSymbol(String ID, String Type, String Symbol, String LC, String RC){
+        this.table1.addRow(new Object[]{ID, Type, Symbol, LC, RC});
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,18 +36,21 @@ public class DAG_TABLE extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("DAG Table");
+        setResizable(false);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
             },
             new String [] {
-                "ID", "Symbol", "Left Child", "Right Child"
+                "ID", "Type", "Symbol","Left Child", "Right Child"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        table.setShowGrid(true);
+        jScrollPane1.setViewportView(table);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -52,6 +64,7 @@ public class DAG_TABLE extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -92,6 +105,6 @@ public class DAG_TABLE extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }

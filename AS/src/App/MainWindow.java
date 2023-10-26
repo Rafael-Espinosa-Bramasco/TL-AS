@@ -120,10 +120,10 @@ public class MainWindow extends javax.swing.JFrame {
         return c == ')';
     }
     private boolean isOpenPar(String s){
-        return s == "(";
+        return "(".equals(s);
     }
     private boolean isClosePar(String s){
-        return s == ")";
+        return ")".equals(s);
     }
     private boolean isOP(char c){
         switch(c){
@@ -298,6 +298,110 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }
     
+    private void createDAGTable(ArrayList<String> tokens){
+        String ACT;
+        
+        ArrayList<DAG_Obj> DAG_Table = new ArrayList<>();
+        Stack<DAG_Obj> preAnalisys = new Stack<>();
+        DAG_Obj aux;
+        
+        for(int i = 0 ; i < tokens.size() ; i++){
+            ACT = tokens.get(i);
+            if(isIdentifier(ACT) || isNumber(ACT)){
+                aux = new DAG_Obj((isIdentifier(ACT) ? "ID" : "NUM"),ACT,"");
+                if(!DAG_OBJ_EXISTS(aux,DAG_Table)){
+                    DAG_Table.add(aux);
+                }
+                preAnalisys.push(aux);
+            }else if(isClosePar(ACT)){
+                makeProcess(preAnalisys, DAG_Table);
+            }else if(isOP(ACT)){
+                aux = new DAG_Obj(ACT,"","");
+                preAnalisys.push(aux);
+            }
+        }
+        
+        // Finish Process
+        DAG_Obj L,C,R;
+        while(preAnalisys.size() > 1){
+            R = preAnalisys.pop();
+            C = preAnalisys.pop();
+            L = preAnalisys.pop();
+
+            int indexR, indexL;
+            indexL = DAG_OBJ_INDEX(L, DAG_Table);
+            indexR = DAG_OBJ_INDEX(R, DAG_Table);
+
+            C.setData1(String.valueOf(indexL));
+            C.setData2(String.valueOf(indexR));
+            
+            if(!DAG_OBJ_EXISTS(C, DAG_Table)){
+                DAG_Table.add(C);
+            }
+            preAnalisys.add(C);
+        }
+        
+        if(this.myDAGTable == null){
+            this.myDAGTable = new DAG_TABLE();
+            
+            
+            for(int i = 0 ; i < DAG_Table.size() ; i++){
+                aux = DAG_Table.get(i);
+                if("NUM".equals(aux.getType()) || "ID".equals(aux.getType())){
+                    this.myDAGTable.addSymbol(String.valueOf(i), aux.getType(), aux.getData1(), "N/A", "N/A");
+                }else{
+                    this.myDAGTable.addSymbol(String.valueOf(i), aux.getType(), aux.getType(), aux.getData1(), aux.getData2());
+                }
+            }
+            
+            this.myDAGTable.setVisible(true);
+        }
+    }
+    
+    private void makeProcess(Stack<DAG_Obj> preAnalisys, ArrayList<DAG_Obj> DAG_Table){
+        DAG_Obj L,C,R;
+        while(preAnalisys.size() > 1){
+            R = preAnalisys.pop();
+            C = preAnalisys.pop();
+            L = preAnalisys.pop();
+
+            int indexR, indexL;
+            indexL = DAG_OBJ_INDEX(L, DAG_Table);
+            indexR = DAG_OBJ_INDEX(R, DAG_Table);
+
+            C.setData1(String.valueOf(indexL));
+            C.setData2(String.valueOf(indexR));
+
+            //comparar si C existe en la tabla, si si entonces simplemente agregrlo al pre analisis, si no entonces agregarlo a ambos
+            if(!DAG_OBJ_EXISTS(C, DAG_Table)){
+                DAG_Table.add(C);
+                preAnalisys.add(C);
+            }else{
+                preAnalisys.add(C);
+                break;
+            }
+        }
+    }
+    
+    private int DAG_OBJ_INDEX(DAG_Obj E, ArrayList<DAG_Obj> DAG_Table){
+        for(int i = 0 ; i < DAG_Table.size() ; i++){
+            if(E.compareTo(DAG_Table.get(i))){
+                return i;
+            }
+        }
+        
+        return -1;
+    }
+    
+    private boolean DAG_OBJ_EXISTS(DAG_Obj E, ArrayList<DAG_Obj> DAG_Table){
+        for(int i = 0 ; i < DAG_Table.size() ; i++){
+            if(E.compareTo(DAG_Table.get(i))){
+                return true;
+            }
+        }
+        return false;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -315,7 +419,7 @@ public class MainWindow extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Analizador Sintactico");
+        setTitle("Analizador Front-End");
         setResizable(false);
 
         inputLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -337,7 +441,7 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel5.setText("Analizador Sintactico");
+        jLabel5.setText("Analizador Front-End");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -425,6 +529,7 @@ public class MainWindow extends javax.swing.JFrame {
         this.createSymbolsTable(symbolTable);
         
         // Create DAG table
+        this.createDAGTable(allTokens);
         
         System.out.println(allTokens);
         System.out.println(symbolTable);
