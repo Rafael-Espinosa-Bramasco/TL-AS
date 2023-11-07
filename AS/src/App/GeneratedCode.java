@@ -20,6 +20,10 @@ public class GeneratedCode extends javax.swing.JFrame {
     public void addLine(String x){
         this.CodeField.setText(this.CodeField.getText().concat(x).concat("\n"));
     }
+    
+    public void setWTitle(String x){
+        this.setTitle(x);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

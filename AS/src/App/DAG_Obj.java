@@ -13,9 +13,18 @@ public class DAG_Obj {
         this.type = t;
         this.data1 = d1;
         this.data2 = d2;
+        this.var = "";
     }
     
-    private String type, data1, data2;
+    private String type, data1, data2, var;
+    
+    public String getVar(){
+        return this.var;
+    }
+    
+    public void setVar(String x){
+        this.var = x;
+    }
     
     public String getType(){
         return this.type;
@@ -38,6 +47,6 @@ public class DAG_Obj {
     }
     
     public boolean compareTo(DAG_Obj otherObj){
-        return this.type.equals(otherObj.getType()) && this.data1.equals(otherObj.getData1()) && this.data2.equals(otherObj.getData2());
+        return this.type.equals(otherObj.getType()) && this.data1.equals(otherObj.getData1()) && this.data2.equals(otherObj.getData2()) && this.var.equals(otherObj.getVar());
     }
 }

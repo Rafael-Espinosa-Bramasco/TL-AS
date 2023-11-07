@@ -356,6 +356,50 @@ public class MainWindow extends javax.swing.JFrame {
             
             this.myDAGTable.setVisible(true);
         }
+        
+        dif3AC(DAG_Table);
+    }
+    
+    private void dif3AC( ArrayList<DAG_Obj> DAG_Table){
+        GeneratedCode DIF3AC = new GeneratedCode();
+        DAG_Obj aux;
+        String line = "";
+        int varCount = 0;
+        
+        for(int i = 0 ; i < DAG_Table.size() ; i++){
+            aux = DAG_Table.get(i);
+            
+            if(!aux.getType().equals("ID")){
+                DAG_Table.get(i).setVar("t".concat(String.valueOf(varCount)));
+                varCount++;
+            }else{
+                DAG_Table.get(i).setVar(aux.getData1());
+            }
+        }
+        
+        String var1, var2;
+        
+        for(int i = 0 ; i < DAG_Table.size() ; i++){
+            aux = DAG_Table.get(i);
+            if(aux.getType().equals("NUM")){
+                line = aux.getVar().concat(" = ").concat(aux.getData1());
+                
+                DIF3AC.addLine(line);
+            
+                line = "";
+            }else if(isOP(aux.getType())){
+                line = aux.getVar().concat(" = ");
+                var1 = DAG_Table.get(Integer.parseInt(aux.getData1())).getVar();
+                var2 = DAG_Table.get(Integer.parseInt(aux.getData2())).getVar();
+                line = line.concat(var1).concat(" ").concat(aux.getType()).concat(" ").concat(var2);
+                DIF3AC.addLine(line);
+            
+                line = "";
+            }
+        }
+        
+        DIF3AC.setWTitle("[Optimized] 3 Addresses Code - ".concat(this.lastInput));
+        DIF3AC.setVisible(true);
     }
     
     private void makeProcess(Stack<DAG_Obj> preAnalisys, ArrayList<DAG_Obj> DAG_Table){
