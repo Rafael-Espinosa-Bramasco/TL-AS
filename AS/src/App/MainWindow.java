@@ -356,6 +356,27 @@ public class MainWindow extends javax.swing.JFrame {
             
             this.myDAGTable.setVisible(true);
         }
+        
+        create3WaysCode(DAG_Table);
+        
+        
+    }
+    
+    public void create3WaysCode(ArrayList<DAG_Obj> DAG_Table){
+        GeneratedCode ThreeWaysCode = new GeneratedCode();
+        for(int i = 0 ; i< DAG_Table.size();i++){
+            String aux = "t"+String.valueOf(i+1)+"= ";
+            if(!(DAG_Table.get(i).getType() == "NUM" || DAG_Table.get(i).getType() == "ID")){
+                
+                aux += DAG_Table.get(Integer.parseInt(DAG_Table.get(i).getData1())).getData1()+DAG_Table.get(i).getType() + DAG_Table.get(Integer.parseInt(DAG_Table.get(i).getData2())).getData1();
+            }
+            else{
+                aux += DAG_Table.get(i).getData1();
+            }
+            ThreeWaysCode.addLine(aux);
+        }
+        ThreeWaysCode.setTitle("[Normal] 3 Addresses Code");
+        ThreeWaysCode.setVisible(true);
     }
     
     private void makeProcess(Stack<DAG_Obj> preAnalisys, ArrayList<DAG_Obj> DAG_Table){
