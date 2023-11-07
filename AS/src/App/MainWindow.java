@@ -357,6 +357,7 @@ public class MainWindow extends javax.swing.JFrame {
             this.myDAGTable.setVisible(true);
         }
         
+        create3WaysCode(DAG_Table);
         dif3AC(DAG_Table);
     }
     
@@ -400,6 +401,24 @@ public class MainWindow extends javax.swing.JFrame {
         
         DIF3AC.setWTitle("[Optimized] 3 Addresses Code - ".concat(this.lastInput));
         DIF3AC.setVisible(true);
+    }
+    
+    public void create3WaysCode(ArrayList<DAG_Obj> DAG_Table){
+        GeneratedCode ThreeWaysCode = new GeneratedCode();
+        for(int i = 0 ; i< DAG_Table.size();i++){
+            String aux = "t"+String.valueOf(i+1)+"= ";
+            if(!(DAG_Table.get(i).getType() == "NUM" || DAG_Table.get(i).getType() == "ID")){
+                
+                aux += DAG_Table.get(Integer.parseInt(DAG_Table.get(i).getData1())).getData1()+DAG_Table.get(i).getType() + DAG_Table.get(Integer.parseInt(DAG_Table.get(i).getData2())).getData1();
+            }
+            else{
+                aux += DAG_Table.get(i).getData1();
+            }
+            ThreeWaysCode.addLine(aux);
+        }
+        ThreeWaysCode.setTitle("[Normal] 3 Addresses Code");
+        ThreeWaysCode.setVisible(true);
+>>>>>>> bd555bc24da7b2707be8db7492c698826e79ec2b
     }
     
     private void makeProcess(Stack<DAG_Obj> preAnalisys, ArrayList<DAG_Obj> DAG_Table){
