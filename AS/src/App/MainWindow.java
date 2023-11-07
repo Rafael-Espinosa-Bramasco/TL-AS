@@ -418,7 +418,6 @@ public class MainWindow extends javax.swing.JFrame {
         }
         ThreeWaysCode.setTitle("[Normal] 3 Addresses Code");
         ThreeWaysCode.setVisible(true);
->>>>>>> bd555bc24da7b2707be8db7492c698826e79ec2b
     }
     
     private void makeProcess(Stack<DAG_Obj> preAnalisys, ArrayList<DAG_Obj> DAG_Table){
