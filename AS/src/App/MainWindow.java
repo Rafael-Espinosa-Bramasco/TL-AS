@@ -364,7 +364,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void dif3AC( ArrayList<DAG_Obj> DAG_Table){
         GeneratedCode DIF3AC = new GeneratedCode();
         DAG_Obj aux;
-        String line = "";
+        String line;
         int varCount = 0;
         
         for(int i = 0 ; i < DAG_Table.size() ; i++){
@@ -387,7 +387,6 @@ public class MainWindow extends javax.swing.JFrame {
                 
                 DIF3AC.addLine(line);
             
-                line = "";
             }else if(isOP(aux.getType())){
                 line = aux.getVar().concat(" = ");
                 var1 = DAG_Table.get(Integer.parseInt(aux.getData1())).getVar();
@@ -395,7 +394,6 @@ public class MainWindow extends javax.swing.JFrame {
                 line = line.concat(var1).concat(" ").concat(aux.getType()).concat(" ").concat(var2);
                 DIF3AC.addLine(line);
             
-                line = "";
             }
         }
         
@@ -404,20 +402,32 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     public void create3WaysCode(ArrayList<DAG_Obj> DAG_Table){
-        GeneratedCode ThreeWaysCode = new GeneratedCode();
-        for(int i = 0 ; i< DAG_Table.size();i++){
-            String aux = "t"+String.valueOf(i+1)+"= ";
-            if(!(DAG_Table.get(i).getType() == "NUM" || DAG_Table.get(i).getType() == "ID")){
-                
-                aux += DAG_Table.get(Integer.parseInt(DAG_Table.get(i).getData1())).getData1()+DAG_Table.get(i).getType() + DAG_Table.get(Integer.parseInt(DAG_Table.get(i).getData2())).getData1();
-            }
-            else{
-                aux += DAG_Table.get(i).getData1();
-            }
-            ThreeWaysCode.addLine(aux);
+        GeneratedCode DIF3AC = new GeneratedCode();
+        DAG_Obj aux;
+        String line;
+        
+        for(int i = 0 ; i < DAG_Table.size() ; i++){
+            DAG_Table.get(i).setVar("t".concat(String.valueOf(i)));
         }
-        ThreeWaysCode.setTitle("[Normal] 3 Addresses Code");
-        ThreeWaysCode.setVisible(true);
+        
+        String var1, var2;
+        
+        for(int i = 0 ; i < DAG_Table.size() ; i++){
+            aux = DAG_Table.get(i);
+            if(aux.getType().equals("NUM") ||aux.getType().equals("ID") ){
+                line = aux.getVar().concat(" = ").concat(aux.getData1());
+                DIF3AC.addLine(line);
+            }else if(isOP(aux.getType())){
+                line = aux.getVar().concat(" = ");
+                var1 = DAG_Table.get(Integer.parseInt(aux.getData1())).getVar();
+                var2 = DAG_Table.get(Integer.parseInt(aux.getData2())).getVar();
+                line = line.concat(var1).concat(" ").concat(aux.getType()).concat(" ").concat(var2);
+                DIF3AC.addLine(line);
+            }
+        }
+        
+        DIF3AC.setWTitle("[Normal] 3 Addresses Code - ".concat(this.lastInput));
+        DIF3AC.setVisible(true);
     }
     
     private void makeProcess(Stack<DAG_Obj> preAnalisys, ArrayList<DAG_Obj> DAG_Table){
